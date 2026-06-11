@@ -1,0 +1,14 @@
+# Core Terraform folders and files
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
+# SSH Keys (Security Alert: Never commit these!)
+terraform-key-ec2
+terraform-key-ec2.pub
+*.pem
+
+# OS files
+.DS_Store
