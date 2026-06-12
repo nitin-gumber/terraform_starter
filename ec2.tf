@@ -57,7 +57,21 @@ resource "aws_security_group" "my_security_group" {
 }
 
 
+#ec2 instance
+resource "aws_instance" "my_instance" {
+  key_name               = aws_key_pair.my_key.key_name
+  vpc_security_group_ids = [aws_security_group.my_security_group.id]
+  instance_type          = var.ec2_instance_type
+  ami                    = var.ec2_ami_id
 
+  root_block_device {
+    volume_size = var.ec2_root_storage_size
+    volume_type = "gp3"
+  }
 
-#ec2 intance
+  tags = {
+    Name = "Nitin_First_Terraform_automate_server"
+  }
+}
+
 
