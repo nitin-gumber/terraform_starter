@@ -61,11 +61,17 @@ resource "aws_security_group" "my_security_group" {
 resource "aws_instance" "my_instance" {
 
   # meta arguments -> count:allows you to scale your infrastructure by creating multiple instances of a resource, module, or data source from a single configuration block
-  count = 2
+  # count = 2
+
+  # meta arguments -> for_each: The for_each meta-argument in Terraform allows you to dynamically create multiple instances of a resource, data source, or module from a single configuration block. 
+  for_each = tomap({
+    Nitin-automate-micro = "t3.micro"
+    Nitin-automate-small = "t3.small"
+  })
 
   key_name               = aws_key_pair.my_key.key_name
   vpc_security_group_ids = [aws_security_group.my_security_group.id]
-  instance_type          = var.ec2_instance_type
+  instance_type          = each.value
   ami                    = var.ec2_ami_id
   user_data              = file("install_nginx.sh")
 
@@ -75,7 +81,7 @@ resource "aws_instance" "my_instance" {
   }
 
   tags = {
-    Name = "Nitin-terrform-server-${count.index}"
+    Name = each.key
   }
 }
 
