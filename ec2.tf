@@ -59,10 +59,15 @@ resource "aws_security_group" "my_security_group" {
 
 #ec2 instance
 resource "aws_instance" "my_instance" {
+
+  # meta arguments -> count:allows you to scale your infrastructure by creating multiple instances of a resource, module, or data source from a single configuration block
+  count = 2
+
   key_name               = aws_key_pair.my_key.key_name
   vpc_security_group_ids = [aws_security_group.my_security_group.id]
   instance_type          = var.ec2_instance_type
   ami                    = var.ec2_ami_id
+  user_data              = file("install_nginx.sh")
 
   root_block_device {
     volume_size = var.ec2_root_storage_size
@@ -70,7 +75,7 @@ resource "aws_instance" "my_instance" {
   }
 
   tags = {
-    Name = "Nitin_First_Terraform_automate_server"
+    Name = "Nitin-terrform-server-${count.index}"
   }
 }
 
