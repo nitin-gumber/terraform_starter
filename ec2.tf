@@ -52,7 +52,7 @@ resource "aws_security_group" "my_security_group" {
   }
 
   tags = {
-    Name = "automate-sg"
+    Name = "${var.env}-automate-sg"
   }
 }
 
@@ -67,7 +67,7 @@ resource "aws_instance" "my_instance" {
   for_each = tomap({
     Nitin-automate-micro = "t3.micro"
     Nitin-automate-small = "t3.small"
-    Nitin-automate-small = "t3.small"
+    # Nitin-automate-small = "t3.small"
   })
 
   key_name               = aws_key_pair.my_key.key_name
@@ -82,14 +82,15 @@ resource "aws_instance" "my_instance" {
   }
 
   tags = {
-    Name = each.key
+    Name        = "${each.key}-${var.env}"
     Environment = var.env
   }
 }
 
-resource "aws_instance" "my_new_instance" {
-  ami           = "unkown"
-  instance_type = "unkown"
-}
+#  import the existing ec2 instance --> import command: terraform import aws_instance.my_instance i-0e1f2a3b4c5d6e7f8
+# resource "aws_instance" "my_new_instance" {
+#   ami           = "unkown"
+#   instance_type = "unkown"
+# }
 
 
