@@ -1,6 +1,6 @@
 # keypair (login)
 resource "aws_key_pair" "my_key" {
-  key_name   = "terraform-key-ec2"
+  key_name   = "${var.env}-terraform-key-ec2"
   public_key = file("terraform-key-ec2.pub")
 }
 
@@ -11,7 +11,7 @@ resource "aws_default_vpc" "default" {
 }
 
 resource "aws_security_group" "my_security_group" {
-  name        = "automate-sg"
+  name        = "${var.env}-automate-sg"
   description = "This will add a TF generated Security Group"
   vpc_id      = aws_default_vpc.default.id # interpolation
 
@@ -52,7 +52,8 @@ resource "aws_security_group" "my_security_group" {
   }
 
   tags = {
-    Name = "automate-sg"
+    Name        = "${var.env}-automate-sg"
+    Environment = var.env
   }
 }
 
@@ -65,9 +66,10 @@ resource "aws_instance" "my_instance" {
 
   # meta arguments -> for_each: The for_each meta-argument in Terraform allows you to dynamically create multiple instances of a resource, data source, or module from a single configuration block. 
   for_each = tomap({
+    # Nitin-automate-micro = "t3.micro"
+    # Nitin-automate-small = "t3.small"
+    # Nitin-automate-small = "t3.small"
     Nitin-automate-micro = "t3.micro"
-    Nitin-automate-small = "t3.small"
-    Nitin-automate-small = "t3.small"
   })
 
   key_name               = aws_key_pair.my_key.key_name
@@ -82,14 +84,14 @@ resource "aws_instance" "my_instance" {
   }
 
   tags = {
-    Name = each.key
+    Name        = "${each.key}-${var.env}"
     Environment = var.env
   }
 }
 
-resource "aws_instance" "my_new_instance" {
-  ami           = "unkown"
-  instance_type = "unkown"
-}
+# resource "aws_instance" "my_new_instance" {
+#   ami           = "unkown"
+#   instance_type = "unkown"
+# }
 
 
