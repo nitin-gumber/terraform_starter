@@ -67,6 +67,7 @@ resource "aws_instance" "my_instance" {
   for_each = tomap({
     Nitin-automate-micro = "t3.micro"
     Nitin-automate-small = "t3.small"
+    Nitin-automate-small = "t3.small"
   })
 
   key_name               = aws_key_pair.my_key.key_name
@@ -83,6 +84,11 @@ resource "aws_instance" "my_instance" {
   tags = {
     Name = each.key
   }
+}
+
+resource "aws_instance" "my_new_instance" {
+  ami           = "unkown"
+  instance_type = "unkown"
 }
 
 

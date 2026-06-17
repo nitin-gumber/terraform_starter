@@ -5,4 +5,12 @@ terraform {
       version = "~> 6.0"
     }
   }
+
+  backend "s3" {
+    bucket       = "remote-state-management-bucket"
+    key          = "terraform.tfstate"
+    region       = "ap-south-1"
+    use_lockfile = true
+  }
+
 }
